@@ -18,29 +18,35 @@ export default function AddMember() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     // Combine time with AM/PM
     const formattedBreakfast = `${breakfastTime} ${breakfastAmPm}`;
     const formattedLunch = `${lunchTime} ${lunchAmPm}`;
     const formattedDinner = `${dinnerTime} ${dinnerAmPm}`;
 
-    // Handle form submission logic here
-    console.log({ name, dob, formattedBreakfast, formattedLunch, formattedDinner });
-
-    const response = await fetch("/api/add-member", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, dob, formattedBreakfast, formattedLunch, formattedDinner }),
+    // Send data to the backend
+    const response = await fetch("/api/member", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            name,
+            dob,
+            Breakfast: formattedBreakfast,
+            Lunch: formattedLunch,
+            Dinner: formattedDinner,
+        }),
     });
 
     if (response.ok) {
-      alert("New family member added successfully!");
-      router.push("/dashboard");
+        alert("New family member added successfully!");
+        router.push("/dashboard");
     } else {
-      alert("Failed to add new family member");
+        alert("Failed to add new family member");
     }
-  };
+};
+
 
   if (status.status === "unauthenticated") {
     router.push("/login");
@@ -115,7 +121,7 @@ export default function AddMember() {
                         required
                       />
                     </div>
-                    <div>
+                    {/* <div>
                       <label className="block text-sm font-medium text-gray-700">
                         AM/PM
                       </label>
@@ -128,7 +134,7 @@ export default function AddMember() {
                         <option value="AM">AM</option>
                         <option value="PM">PM</option>
                       </select>
-                    </div>
+                    </div> */}
                   </div>
 
                   {/* Lunch Time Input */}
@@ -145,7 +151,7 @@ export default function AddMember() {
                         required
                       />
                     </div>
-                    <div>
+                    {/* <div>
                       <label className="block text-sm font-medium text-gray-700">
                         AM/PM
                       </label>
@@ -158,7 +164,7 @@ export default function AddMember() {
                         <option value="AM">AM</option>
                         <option value="PM">PM</option>
                       </select>
-                    </div>
+                    </div> */}
                   </div>
 
                   {/* Dinner Time Input */}
@@ -175,7 +181,7 @@ export default function AddMember() {
                         required
                       />
                     </div>
-                    <div>
+                    {/* <div>
                       <label className="block text-sm  font-medium text-gray-700">
                         AM/PM
                       </label>
@@ -188,7 +194,7 @@ export default function AddMember() {
                         <option value="AM">AM</option>
                         <option value="PM">PM</option>
                       </select>
-                    </div>
+                    </div> */}
                   </div>
 
                   {/* Submit Button */}

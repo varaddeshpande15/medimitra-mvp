@@ -22,7 +22,11 @@ const memberSchema = new Schema({
     Dinner: {
         type: String,
         required: true
-    }
+    },
+    user: {
+        type: Schema.Types.ObjectId, // Data type for ObjectId
+        ref: "User", // Reference to the User model
+      },
 });
 
 // Check if the model exists in `models`, else create a new model

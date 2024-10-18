@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import Member from "./member";
 const { Schema, model, models } = mongoose;
 
 // Define the User Schema
@@ -14,10 +14,10 @@ const userSchema = new Schema(
 			type: String,
 			required: false,
 		},
-		chats: [
+		members: [
 			{
-				type: Schema.Types.ObjectId, // References to the Chat model
-				ref: "Chat", // Reference the Chat collection
+				type: Schema.Types.ObjectId, // References to the Member model
+				ref: "Member", // Reference the Member collection
 				required: false, // This field can be optional
 			},
 		],

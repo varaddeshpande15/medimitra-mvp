@@ -1,43 +1,41 @@
-import connect from "@utils/db"; // Import your DB connection function
-import Member from "@models/member"; // Import your Member model
+import connect from "@utils/db"; 
+import Member from "@models/member"; 
+import User from '@models/User';
+import { getServerSession } from "next-auth/next"; 
+import { NextResponse } from "next/server"; 
+import { authOptions } from "../auth/[...nextauth]/route"; 
 
-// Named export for GET request
-export async function GET(req) {
-    await connect();
-
-    try {
-        // Fetch all members from the database
-        const members = await Member.find({});
-        
-        // Send the list of members as JSON
-        return new Response(JSON.stringify(members), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' },
-        });
-    } catch (error) {
-        console.error('Error fetching members:', error);
-        return new Response(JSON.stringify({ message: 'Error fetching members.' }), {
-            status: 500,
-            headers: { 'Content-Type': 'application/json' },
-        });
-    }
-}
-
-// Named export for POST request
 export async function POST(req) {
+    const session = await getServerSession(authOptions);
     await connect();
+
+    if (!session || !session.user?.email) {
+        return new NextResponse("Unauthorized", { status: 401 });
+    }
 
     // Parse the request body
     const { name, dob, Breakfast, Lunch, Dinner } = await req.json();
+    
+    console.log("Received Data:", { name, dob, Breakfast, Lunch, Dinner });
 
     try {
-        // Create a new member
-        const newMember = new Member({ name, dob, Breakfast, Lunch, Dinner });
+        const { email: userEmail } = session.user;
 
-        // Save the new member to the database
+        const user = await User.findOne({ email: userEmail });
+        if (!user) {
+            return new NextResponse(`User with email ${userEmail} not found`, {
+                status: 404,
+            });
+        }
+
+        const newMember = new Member({ name, dob, Breakfast, Lunch, Dinner, user: user._id });
+        
+        // Ensure the user has a members array
+        user.members.push(newMember._id);
+        await user.save(); 
+
         await newMember.save();
 
-        // Respond with the created member
         return new Response(JSON.stringify(newMember), {
             status: 201,
             headers: { 'Content-Type': 'application/json' },

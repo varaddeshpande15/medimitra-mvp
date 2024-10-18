@@ -6,10 +6,13 @@ import { NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/route"; 
 
 export async function POST(req) {
+    console.log("POST request received at /api/member");
+    
     const session = await getServerSession(authOptions);
     await connect();
 
     if (!session || !session.user?.email) {
+        console.error("Unauthorized access attempt");
         return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -23,6 +26,7 @@ export async function POST(req) {
 
         const user = await User.findOne({ email: userEmail });
         if (!user) {
+            console.error(`User with email ${userEmail} not found`);
             return new NextResponse(`User with email ${userEmail} not found`, {
                 status: 404,
             });
@@ -36,6 +40,7 @@ export async function POST(req) {
 
         await newMember.save();
 
+        console.log("New member added:", newMember);
         return new Response(JSON.stringify(newMember), {
             status: 201,
             headers: { 'Content-Type': 'application/json' },
@@ -54,10 +59,13 @@ export async function POST(req) {
 
 // Add the GET method
 export async function GET(req) {
+    console.log("GET request received at /api/member");
+    
     const session = await getServerSession(authOptions);
     await connect();
 
     if (!session || !session.user?.email) {
+        console.error("Unauthorized access attempt");
         return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -66,6 +74,7 @@ export async function GET(req) {
 
         const user = await User.findOne({ email: userEmail });
         if (!user) {
+            console.error(`User with email ${userEmail} not found`);
             return new NextResponse(`User with email ${userEmail} not found`, {
                 status: 404,
             });
@@ -73,6 +82,7 @@ export async function GET(req) {
 
         // Find all members associated with the user
         const members = await Member.find({ user: user._id });
+        console.log("Fetched members:", members);
         
         return new Response(JSON.stringify(members), {
             status: 200,

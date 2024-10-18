@@ -13,7 +13,7 @@ function MemberDashboard() {
 
   return (
     <div>
-        <NavbarInternal /> 
+        {/* <NavbarInternal />  */}
 
     <div className=''>
         

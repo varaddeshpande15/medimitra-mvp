@@ -65,7 +65,7 @@ export default function Dashboard() {
               <div className="add-member-icon">
                 <button
                   onClick={handleAddMember}
-                  className="text-6xl text-gray-400 hover:text-blue-500 transition duration-200"
+                  className="text-6xl text-gray-400 hover:text-blue-500 transition duration-200 fixed bottom-9 right-5"
                   title="Add New Member"
                 >
                   +

@@ -5,11 +5,19 @@ import easyocr
 import cv2
 import google.generativeai as genai
 from datetime import datetime
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
 import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 
-# FastAPI instance
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Update with your Next.js app URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Configure Gemini API with your key
 genai.configure(api_key="AIzaSyCmOXk0dbcRU83gFGxf5MF22oy78c3c9vk")  # Replace with your actual API key
@@ -232,9 +240,9 @@ async def delete_user(user_name: str):
 # Endpoint to upload a prescription and process it with OCR + Gemini
 @app.post("/ocr/")
 async def upload_image(
-    user_name: str,                
-    family_name: str, 
-    file: UploadFile = File(...)
+    user_name: str = Form(...),                
+    family_name: str = Form(...), 
+    file: UploadFile = File(...),
 ):
     try:
         # Save the uploaded file locally

@@ -8,40 +8,7 @@
                     "lunch": "13:00",
                     "dinner": "21:00"
                 },
-                "schedules": [
-                    {
-                        "medicine": "TAB_ DEMO MEDICINE 1",
-                        "dosage": "Moming Night",
-                        "times": [
-                            "08:00",
-                            "21:00"
-                        ]
-                    },
-                    {
-                        "medicine": "CAP: DBUO MEDICINE 2",
-                        "dosage": "Moming Night",
-                        "times": [
-                            "08:00",
-                            "23:54"
-                        ]
-                    },
-                    {
-                        "medicine": "TAB_ DEC EDICINE 3",
-                        "dosage": "Moming Night",
-                        "times": [
-                            "08:00",
-                            "21:00"
-                        ]
-                    },
-                    {
-                        "medicine": "TAB: DEMO MEDICINE4",
-                        "dosage": "Maming; 1/2 Night",
-                        "times": [
-                            "08:00",
-                            "21:00"
-                        ]
-                    }
-                ]
+                "schedules": []
             }
         }
     }

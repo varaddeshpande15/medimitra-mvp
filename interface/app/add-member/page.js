@@ -40,12 +40,14 @@ export default function AddMember() {
     });
 
     if (response.ok) {
+        const newMember = await response.json(); // Assuming your API returns the new member object
         alert("New family member added successfully!");
-        router.push("/dashboard");
+        router.push(`/member-dashboard/${newMember.id}`); // Redirect to the new member's dashboard
     } else {
         alert("Failed to add new family member");
     }
 };
+
 
 
   if (status.status === "unauthenticated") {

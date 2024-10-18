@@ -27,6 +27,10 @@ const memberSchema = new Schema({
         type: Schema.Types.ObjectId, // Data type for ObjectId
         ref: "User", // Reference to the User model
       },
+    medicines: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Medicine', // Reference to Medicine model
+    }],
 });
 
 // Check if the model exists in `models`, else create a new model

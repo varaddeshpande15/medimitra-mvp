@@ -1,4 +1,5 @@
 import mongoose from "mongoose"; // Correct import for mongoose
+import { type } from "os";
 const { Schema, model, models } = mongoose; // Destructure from mongoose
 
 // Define the Medicine Schema
@@ -15,6 +16,10 @@ const medicineSchema = new Schema({
     time: {
         type: [String], // Correct array syntax for an array of strings
         required: true
+    },
+    member: {
+        type: Schema.Types.ObjectId,
+        ref: "Member"
     }
 });
 

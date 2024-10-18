@@ -10,7 +10,7 @@ const connect = async () => {
     // console.log(process.env.MONGO_URL);
     try {
         // Connect to MongoDB with connection options
-        await mongoose.connect("mongodb+srv://jadhavsushant379:Mhcmy0VRcJKtNYJN@cluster0.ejvx0.mongodb.net/medimitra?retryWrites=true&w=majority&appName=Cluster0"
+        await mongoose.connect("mongodb+srv://existencefinadvise:Zv2xKKMYyvafc2ys@cluster0.llztjlx.mongodb.net/FinAdvise?retryWrites=true&w=majority&appName=Cluster0"
             // useNewUrlParser: true,
             // useUnifiedTopology: true,
         );

@@ -51,3 +51,41 @@ export async function POST(req) {
         });
     }
 }
+
+// Add the GET method
+export async function GET(req) {
+    const session = await getServerSession(authOptions);
+    await connect();
+
+    if (!session || !session.user?.email) {
+        return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    try {
+        const { email: userEmail } = session.user;
+
+        const user = await User.findOne({ email: userEmail });
+        if (!user) {
+            return new NextResponse(`User with email ${userEmail} not found`, {
+                status: 404,
+            });
+        }
+
+        // Find all members associated with the user
+        const members = await Member.find({ user: user._id });
+        
+        return new Response(JSON.stringify(members), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    } catch (error) {
+        console.error('Error fetching members:', error);
+        return new Response(JSON.stringify({ 
+            message: 'Error fetching members.', 
+            error: error.message 
+        }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
+}

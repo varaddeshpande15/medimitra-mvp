@@ -1,5 +1,6 @@
 import connect from "@utils/db"; 
-import Medicine from "@models/medicine"; 
+// import Medicine from "@models/medicine"; 
+import Medicine from "@models/medecine";
 import Member from "@models/member"; 
 import { NextResponse } from "next/server"; 
 

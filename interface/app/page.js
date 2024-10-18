@@ -202,7 +202,6 @@ export default function Home() {
 							</h2>
 							<p className="text-center font-inter font-extralight text-base">
 								Tailored financial advice based on your unique
-								profile, goals, and risk tolerance.
 							</p>
 						</div>
 

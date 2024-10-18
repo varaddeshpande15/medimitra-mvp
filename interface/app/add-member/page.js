@@ -42,7 +42,8 @@ export default function AddMember() {
     if (response.ok) {
         const newMember = await response.json(); // Assuming your API returns the new member object
         alert("New family member added successfully!");
-        router.push(`/member-dashboard/${newMember.id}`); // Redirect to the new member's dashboard
+        router.push(`/new-member`); // Redirect to Add Medicine page with the new member ID
+
     } else {
         alert("Failed to add new family member");
     }

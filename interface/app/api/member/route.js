@@ -21,15 +21,39 @@ export async function POST(req) {
 
   console.log("Received Data:", { name, dob, Breakfast, Lunch, Dinner });
 
-  try {
-    const { email: userEmail } = session.user;
+    try {
+        const { email: userEmail } = session.user;
 
-    const user = await User.findOne({ email: userEmail });
-    if (!user) {
-      console.error(`User with email ${userEmail} not found`);
-      return new NextResponse(`User with email ${userEmail} not found`, {
-        status: 404,
-      });
+        const user = await User.findOne({ email: userEmail });
+        if (!user) {
+            console.error(`User with email ${userEmail} not found`);
+    return new NextResponse(`User with email ${userEmail} not found` , {
+                status: 404,
+            });
+        }
+
+        const newMember = new Member({ name, dob, Breakfast, Lunch, Dinner, user: user._id });
+        
+        // Ensure the user has a members array
+        user.members.push(newMember._id);
+        await user.save(); 
+
+        await newMember.save();
+
+        console.log("New member added:", newMember);
+        return new Response(JSON.stringify(newMember), {
+            status: 201,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    } catch (error) {
+        console.error('Error adding member:', error);
+        return new Response(JSON.stringify({ 
+            message: 'Error adding member.', 
+            error: error.message 
+        }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
+        });
     }
 
     const newMember = new Member({

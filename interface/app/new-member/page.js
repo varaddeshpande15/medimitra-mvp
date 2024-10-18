@@ -40,7 +40,7 @@ export default function Dashboard() {
   }, [status, router]); // Depend on status and router
 
   const handleAddMember = () => {
-    router.push("/add-member"); // Redirects to the "add-member" page
+    router.push("/uploadprescription"); // Redirects to the "add-member" page
   };
 
   const handleMemberClick = (memberId) => {

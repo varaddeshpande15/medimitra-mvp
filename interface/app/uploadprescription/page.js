@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { FaTimes } from 'react-icons/fa'; // Importing cross icon
 
 function UploadPrescription() {
-  const [images, setImages] = useState([]); // Change to an array to hold multiple images
+  const [images, setImages] = useState([]); // Array to hold multiple images
   const [previews, setPreviews] = useState([]); // Array for previews
+  const fileInputRef = React.useRef(null); // Reference for the hidden input element
 
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files); // Get files from the input
@@ -16,6 +17,10 @@ function UploadPrescription() {
   const handleRemoveImage = (index) => {
     setImages(prevImages => prevImages.filter((_, i) => i !== index)); // Remove the image from the array
     setPreviews(prevPreviews => prevPreviews.filter((_, i) => i !== index)); // Remove the preview
+  };
+
+  const handleUploadClick = () => {
+    fileInputRef.current.click(); // Programmatically trigger the hidden input
   };
 
   const handleSubmit = () => {
@@ -47,18 +52,27 @@ function UploadPrescription() {
               ))}
             </>
           )}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="absolute inset-0 opacity-0 cursor-pointer"
-            multiple // Allow multiple files
-          />
         </div>
 
         <button
+          onClick={handleUploadClick}
+          className="mb-4 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+        >
+          Upload File
+        </button>
+
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          ref={fileInputRef} // Reference to the hidden input
+          className="hidden" // Hide the input
+          multiple // Allow multiple files
+        />
+
+        <button
           onClick={handleSubmit}
-          className="mt-4 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
           disabled={previews.length === 0} // Disable if no images are uploaded
         >
           Submit

@@ -7,30 +7,10 @@ import Link from "next/link";
 
 export default function Dashboard() {
   const status = useSession();
-  const [title, setTitle] = useState("");
   const router = useRouter();
+  const [title, setTitle] = useState("");
   const [filteredChats, setFilteredChats] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sideBarOpen, setSideBarOpen] = useState(false);
-
-  const handleCreateNewChat = async (e) => {
-    e.preventDefault();
-
-    const response = await fetch("/api/create-chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title }),
-    });
-
-    if (response.ok) {
-      const { chatId } = await response.json();
-      router.push(`/chat/${chatId}`);
-    } else {
-      alert("Failed to create new chat");
-    }
-  };
 
   useEffect(() => {
     const fetchFilteredChats = async () => {
@@ -54,38 +34,64 @@ export default function Dashboard() {
         const chats = await response.json();
         setFilteredChats(chats);
       } catch (err) {
-        //setError(`Error fetching filtered chats: ${err.message}`);
+        console.error(err.message);
       }
     };
 
     fetchFilteredChats();
   }, [searchQuery]);
 
-  const handleChatChange = (chatId) => {
-    router.push(`/chat/${chatId}`);
+  const handleAddMember = () => {
+    router.push("/add-member"); // Redirects to the "add-member" page
   };
 
   if (status.status === "unauthenticated") {
     router.push("/login");
   }
+
   if (status.status === "loading") {
     return <div>Loading...</div>;
   }
+
   if (status.status === "authenticated") {
     return (
       <>
         <div className="w-screen h-full relative">
           <NavbarInternal />
-          <img
-            src="blur-purple.svg"
-            alt="blur-purple"
-            className="xs:hidden md:block w-[2000px] h-[2000px] fixed opacity-65 -left-[500px] -top-[500px]"
-            style={{ zIndex: 0 }}
-          />
+
+          
+
+          {/* Main Section */}
           <div
             id="main"
             className="xs:invisible lg:visible w-full h-full bg-gradient-to-r from-[#0F081A] to-black"
-          ></div>
+          >
+            {/* Space between Navbar and user section */}
+            <div className="flex justify-center items-center w-full h-full pt-48"> {/* Added padding at top */}
+              {/* Centered User Logo and Plus Icon */}
+              <div className="flex items-center space-x-6"> 
+                {/* User's Circular Logo */}
+                <div className="user-logo">
+                  <img
+                    src="/path-to-existing-user-logo.jpg" // Replace with actual user profile image or placeholder
+                    alt="User Logo"
+                    className="w-24 h-24 rounded-full object-cover"
+                  />
+                </div>
+
+                {/* Plus Icon */}
+                <div className="add-member-icon">
+                  <button
+                    onClick={handleAddMember}
+                    className="text-6xl text-gray-400 hover:text-blue-500 transition duration-200"
+                    title="Add New Member"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </>
     );

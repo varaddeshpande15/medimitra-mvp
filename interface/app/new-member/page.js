@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; // Use this for Next.js 13 and above
 import { useSession } from "next-auth/react";
 import NavbarInternal from "../components/NavbarInternal";
 
@@ -43,6 +43,10 @@ export default function Dashboard() {
     router.push("/uploadprescription"); // Redirects to the "add-member" page
   };
 
+  const handleMemberClick = (memberId) => {
+    router.push(`/member-dashboard/${memberId}`); // Redirect to the member dashboard
+  };
+
   if (status === "loading") {
     return <div>Loading...</div>;
   }
@@ -79,7 +83,11 @@ export default function Dashboard() {
             {members.length > 0 ? (
               <div className="flex flex-wrap justify-center">
                 {members.map((member) => (
-                  <div key={member._id} className="flex flex-col items-center mx-4 mb-4">
+                  <div
+                    key={member._id}
+                    className="flex flex-col items-center mx-4 mb-4 cursor-pointer" // Add cursor pointer for better UX
+                    onClick={() => handleMemberClick(member._id)} // Add onClick handler
+                  >
                     <div className="member-logo rounded-full overflow-hidden border-2 border-gray-400 w-16 h-16 flex items-center justify-center">
                       <img
                         src={member.profileImage || '/path-to-placeholder-image.jpg'} // Ensure each member has a profile image or a placeholder

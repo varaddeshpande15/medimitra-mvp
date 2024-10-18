@@ -36,7 +36,7 @@ export default function MemberDashboard() {
   const router = useRouter();
     // Function to handle the button click
   const handleAddMedicineClick = () => {
-    router.push('/add-medicine'); // Redirect to the /add-medicine page
+    router.push('/uploadprescription'); // Redirect to the /add-medicine page
   };
 
   // Your logic for fetching member data or other operations
@@ -52,7 +52,7 @@ export default function MemberDashboard() {
   return (
     <div>
       <div>
-         <NavbarInternal /> 
+         {/* <NavbarInternal />  */}
      <div className=''>
         
        <button onClick={handleAddMedicineClick} className="bg-blue-500 text-white px-4 py-2 rounded">

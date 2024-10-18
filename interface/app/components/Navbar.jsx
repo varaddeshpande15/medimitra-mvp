@@ -83,7 +83,7 @@ export default function Navbar() {
           ) : (
             <div className="hidden md:flex space-x-4 items-center">
               <span>{session.user?.email}</span>
-              <Link href="/new-chat">
+              <Link href="/new-member">
                 <button className="bg-white text-black px-3 py-2 tracking-normal font-sans font-semibold rounded-lg hover:bg-purple-500 hover:text-white transition-colors duration-300">
                   Dashboard
                 </button>
@@ -164,7 +164,7 @@ export default function Navbar() {
           ) : (
             <>
               <span>{session.user?.email}</span>
-              <Link href="/new-chat">
+              <Link href="/new-member">
                 <button className="w-full bg-white text-black px-3 py-2 tracking-normal font-sans font-semibold rounded-lg hover:bg-purple-500 hover:text-white transition-colors duration-300">
                   Dashboard
                 </button>

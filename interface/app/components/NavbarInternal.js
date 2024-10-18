@@ -33,7 +33,7 @@ export default function NavbarInternal() {
           <div className="hidden gap-5 mr-5 lg:flex space-x-4 font-semibold">
             <Link
               id="animated-btn"
-              href="/new-chat"
+              href="/new-member"
               className="hover:text-purple-500 tracking-wide font-medium font-inter transition-colors duration-300"
             >
               Personal Advice
@@ -170,7 +170,7 @@ export default function NavbarInternal() {
                 <span>{session.user?.email}</span>
 
                 <Link
-                  href={"/new-chat"}
+                  href={"/new-member"}
                   className="bg-white text-center text-black font-semibold font-sans px-4 py-2 rounded hover:bg-purple-500 hover:text-white transition-colors duration-300"
                 >
                   Dashboard

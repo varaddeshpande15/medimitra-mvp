@@ -8,6 +8,7 @@ from datetime import datetime
 from fastapi import FastAPI, UploadFile, File, Form
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -90,7 +91,6 @@ def remove_user(user_name):
         save_data_to_file(data)
         print(f"Removed user {user_name}.")
 
-# Function to add or update a family member's schedule
 # Function to add or update a family member's schedule
 def add_or_update_schedule(user_name, family_name, medicine, dosage, times):
     data = load_data_from_file()
@@ -203,21 +203,33 @@ def validate_time_format(time_str):
 # FastAPI routes
 
 # 1. Add a new user
+
+class User(BaseModel):
+    email: str
+
 @app.post("/users/")
-async def create_user(user_name: str):
-    add_new_user(user_name)
-    return {"message": f"User {user_name} added successfully."}
+async def create_user(user: User):
+    add_new_user(user.email)  # Change user.user_name to user.email
+    return {"message": f"User {user.email} added successfully."}
 
 # 2. Add a new family member under a user
+# Define a model for the request body
+class FamilyMember(BaseModel):
+    family_name: str
+    dob: str
+    breakfast: str
+    lunch: str
+    dinner: str
+
 @app.post("/users/{user_name}/family/")
-async def create_family_member(user_name: str, family_name: str, dob: str, breakfast: str, lunch: str, dinner: str):
+async def create_family_member(user_name: str, member: FamilyMember):
     meal_times = {
-        "breakfast": breakfast,
-        "lunch": lunch,
-        "dinner": dinner
+        "breakfast": member.breakfast,
+        "lunch": member.lunch,
+        "dinner": member.dinner
     }
-    add_new_family_member(user_name, family_name, dob, meal_times)
-    return {"message": f"Family member {family_name} added under user {user_name}."}
+    add_new_family_member(user_name, member.family_name, member.dob, meal_times)
+    return {"message": f"Family member {member.family_name} added under user {user_name}."}
 
 # 3. Add or update a schedule for a family member under a user
 @app.post("/users/{user_name}/family/{family_name}/schedule/")

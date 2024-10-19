@@ -197,6 +197,33 @@ Meal Times: {meal_times_str}
 """
     return prompt
 
+def create_default_prompt_audio(user_name, family_name):
+    data = load_data_from_file()
+    meal_times = data[user_name]["family_members"][family_name]["meal_times"]
+    meal_times_str = f'Breakfast: {meal_times["breakfast"]}, Lunch: {meal_times["lunch"]}, Dinner: {meal_times["dinner"]}'
+    
+    prompt = f"""
+You are a medical assistant AI. You will be provided with transcribed text of an audio recording of a medical prescription.
+Your job is to extract the following details from the text and return them in JSON format strictly following this schema:
+{{
+    "medicines": [
+        {{
+            "name": "string",
+            "dosage": "string",
+            "times": ["string"]  # format: HH:MM
+        }}
+    ],
+    "duration": "string",
+    "advice": "string",
+    "follow_up": "string"
+}}
+
+Ensure times are in 24-hour format (HH:MM). Provide the response only as JSON. Feel free to correct OCR misreadings as you see fit - for example, the dosage might be read as \"Moming\"  instead of \"Morning\" so you can fix such issues at your liberty when adding info to the JSON.
+
+Meal Times: {meal_times_str}
+"""
+    return prompt
+
 # Parse the extracted text using Gemini
 def parse_with_gemini(extracted_text, default_prompt):
     chat_session = model.start_chat(
@@ -318,8 +345,6 @@ async def upload_image(
     # Step 3: Create the prompt for Gemini
     default_prompt = create_default_prompt(user_name, family_member_name)
 
-    print (default_prompt)
-
     # Step 4: Parse the extracted text using Gemini
     parsed_info = parse_with_gemini(extracted_text, default_prompt)
     print(f"\nParsed Prescription Information:\n{parsed_info}")
@@ -329,7 +354,26 @@ async def upload_image(
 
     return {"message": "Prescription processed and data saved successfully."}
 
+@app.post("/audio-prescription/")
+async def record_audio(
+    user_name: str = Form(...),                
+    family_member_id: str = Form(...), 
+    transcript: str = Form(...),
+):
 
+    family_member_name = find_family_member(family_member_id)
+
+    # Step 3: Create the prompt for Gemini
+    default_prompt = create_default_prompt_audio(user_name, family_member_name)
+
+    # Step 4: Parse the extracted text using Gemini
+    parsed_info = parse_with_gemini(transcript, default_prompt)
+    print(f"\nParsed Prescription Information:\n{parsed_info}")
+
+    # Step 5: Process the parsed info and update the family member's schedule
+    process_parsed_info(parsed_info, user_name, family_member_id)
+
+    return {"message": "Prescription processed and data saved successfully."}
 
 
 # Load existing data at startup

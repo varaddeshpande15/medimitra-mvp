@@ -39,6 +39,12 @@ export default function MemberDashboard() {
       router.push(`/uploadprescription/${id}`); // Redirect to the uploadprescription/[id] page with the member id
     }
   };
+  
+  const handleAddMedicineClickAudio = () => {
+    if (id) {
+      router.push(`/recordprescription/${id}`); // Redirect to the uploadprescription/[id] page with the member id
+    }
+  };
 
   // Example function to handle going back in history
   const handleGoBack = () => {
@@ -57,7 +63,7 @@ export default function MemberDashboard() {
             <FaCamera className="mr-2 translate-y-0.5" />
             Add Medicines using Image
           </button>
-          <button className="bg-white text-3xl flex flex-row font-dm hover:bg-purple-500 text-black hover:text-white px-6 py-3 rounded-xl border-4 border-gray-400">
+          <button onClick={handleAddMedicineClickAudio} className="bg-white text-3xl flex flex-row font-dm hover:bg-purple-500 text-black hover:text-white px-6 py-3 rounded-xl border-4 border-gray-400">
             <FaMicrophone className="mr-2 translate-y-0.5" />
             Add Medicines using Audio
           </button>

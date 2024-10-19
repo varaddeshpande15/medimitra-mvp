@@ -34,7 +34,7 @@ export default function Navbar() {
         </div>
         <div className="flex space-x-4 items-center">
           <div className="hidden gap-5 mr-5 lg:flex space-x-4 font-semibold">
-            <Link
+            {/* <Link
               id="animated-btn"
               href="#feature1"
               className="hover:text-purple-500 tracking-wide font-medium font-inter transition-colors duration-300"
@@ -61,7 +61,7 @@ export default function Navbar() {
               className="hover:text-purple-500 tracking-wide font-medium font-inter transition-colors duration-300"
             >
               About
-            </Link>
+            </Link> */}
           </div>
           {!session ? (
             <div className="hidden lg:flex space-x-4">

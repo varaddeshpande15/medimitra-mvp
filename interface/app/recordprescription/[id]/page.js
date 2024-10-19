@@ -106,7 +106,7 @@ export default function SpeechToText() {
 
       <button
         onClick={handleSubmit}
-        className="px-6 py-3 mt-4 text-black text-2xl font-dm border-4 border-gray-400 rounded-xl hover:text-white font-semibold rounded bg-white hover:bg-purple-500 hover:bg-opacity-80"
+        className="px-6 py-3 mt-4 text-black text-2xl font-dm border-4 border-gray-400 hover:text-white font-semibold rounded-xl bg-white hover:bg-purple-500 hover:bg-opacity-80"
       >
         Submit
       </button>

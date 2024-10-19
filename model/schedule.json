@@ -46,7 +46,7 @@
                         "dosage": "one",
                         "times": [
                             "13:08",
-                            "21:08"
+                            "12:06"
                         ]
                     },
                     {
@@ -73,6 +73,56 @@
                         "times": [
                             "08:45",
                             "21:46"
+                        ]
+                    }
+                ]
+            },
+            "testingnewmember": {
+                "dob": "2004-12-15",
+                "meal_times": {
+                    "breakfast": "04:58",
+                    "lunch": "20:59",
+                    "dinner": "14:59"
+                },
+                "schedules": [
+                    {
+                        "medicine": "TAB_ DEMO MEDICINE 1",
+                        "dosage": "Morning Night",
+                        "times": [
+                            "04:58",
+                            "20:59"
+                        ]
+                    },
+                    {
+                        "medicine": "CAP: DBUO MEDICINE 2",
+                        "dosage": "Morning Night",
+                        "times": [
+                            "04:58",
+                            "20:59"
+                        ]
+                    },
+                    {
+                        "medicine": "TAB_ DEC EDICINE 3",
+                        "dosage": "Morning Night",
+                        "times": [
+                            "04:58",
+                            "20:59"
+                        ]
+                    },
+                    {
+                        "medicine": "TAB: DEMO MEDICINE4",
+                        "dosage": "Morning; 1/2 Night",
+                        "times": [
+                            "04:58",
+                            "14:59"
+                        ]
+                    },
+                    {
+                        "medicine": "Aspirin",
+                        "dosage": "one",
+                        "times": [
+                            "20:59",
+                            "14:59"
                         ]
                     }
                 ]

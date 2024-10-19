@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { useParams, useRouter } from 'next/navigation'; // Updated to handle router for family ID param
-import { FaTimes } from 'react-icons/fa';
+import React, { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useParams, useRouter } from "next/navigation";
+import { FaTimes } from "react-icons/fa";
 
 export default function UploadPrescription() {
   const [images, setImages] = useState([]);
   const [previews, setPreviews] = useState([]);
-  const { data: session, status } = useSession(); // Use session hook to get user email
-  const [email, setEmail] = useState('');
-  const [familyMemberId, setFamilyMemberId] = useState(''); // Family member ID from param
+  const { data: session, status } = useSession();
+  const [email, setEmail] = useState("");
+  const [familyMemberId, setFamilyMemberId] = useState("");
   const fileInputRef = React.useRef(null);
   const router = useRouter();
   const { id } = useParams(); // Grab family member ID from the URL
@@ -26,14 +26,14 @@ export default function UploadPrescription() {
 
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files);
-    const imageUrls = files.map(file => URL.createObjectURL(file));
-    setImages(prevImages => [...prevImages, ...files]); // Store file objects for upload
-    setPreviews(prevPreviews => [...prevPreviews, ...imageUrls]);
+    const imageUrls = files.map((file) => URL.createObjectURL(file));
+    setImages((prevImages) => [...prevImages, ...files]); // Store file objects for upload
+    setPreviews((prevPreviews) => [...prevPreviews, ...imageUrls]);
   };
 
   const handleRemoveImage = (index) => {
-    setImages(prevImages => prevImages.filter((_, i) => i !== index));
-    setPreviews(prevPreviews => prevPreviews.filter((_, i) => i !== index));
+    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
   };
 
   const handleUploadClick = () => {
@@ -41,70 +41,71 @@ export default function UploadPrescription() {
   };
 
   const handleSubmit = async () => {
+    // Validate form data before submitting
+    if (previews.length === 0 || !email || !familyMemberId) {
+      console.error("Cannot submit: Missing required fields or no images.");
+      return;
+    }
+
     const formData = new FormData();
-    formData.append('user_name', email); // Pass the user's email automatically
-    formData.append('family_member_id', familyMemberId); // Pass the family member ID from the param
-    images.forEach(image => {
-      formData.append('file', image);
+    formData.append("user_name", email); // Pass the user's email automatically
+    formData.append("family_member_id", familyMemberId); // Pass the family member ID from the param
+    images.forEach((image) => {
+      formData.append("file", image);
     });
 
+    // Debugging: Check FormData content
+    for (let key of formData.keys()) {
+      console.log(key, formData.get(key));
+    }
+
     try {
-      const response = await fetch('http://127.0.0.1:8000/ocr/', {
-        method: 'POST',
+      const response = await fetch("http://127.0.0.1:8000/ocr/", {
+        method: "POST",
         body: formData,
       });
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
       const data = await response.json();
       console.log("Response from FastAPI:", data);
-      // Handle success or error response here
+      // Provide user feedback on success
     } catch (error) {
       console.error("Error uploading images:", error);
     }
   };
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return <div>Loading...</div>;
   }
 
-  if (status === 'unauthenticated') {
-    router.push('/login'); // Redirect if not authenticated
+  if (status === "unauthenticated") {
+    router.push("/login"); // Redirect if not authenticated
     return null;
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-black">
-      <div className="w-1/2 p-5 border border-gray-300 rounded shadow-lg bg-white flex flex-col items-center">
-        <h2 className="text-lg font-semibold mb-4 text-black text-center">Choose your files</h2>
+    <div className="flex items-center justify-center min-h-screen bg-black bg-[url('/blur-bg.svg')] bg-cover font-dm">
+      <div className="w-full max-w-xl p-5 rounded-lg shadow-2xl bg-black flex flex-col items-center border border-darkPurple border-3">
+        <h2 className="text-4xl font-semibold mb-6 text-white text-center">
+          Upload Prescription
+        </h2>
 
-        {/* Display email automatically */}
-        <div className="mb-4 w-full">
-          <label className="block text-black">User Email: </label>
-          <input
-            type="text"
-            value={email}
-            disabled
-            className="border border-gray-300 p-2 w-full text-black"
-          />
-        </div>
-
-        {/* Display family member ID automatically */}
-        <div className="mb-4 w-full">
-          <label className="block text-black">Family Member ID: </label>
-          <input
-            type="text"
-            value={familyMemberId}
-            disabled
-            className="border border-gray-300 p-2 w-full text-black"
-          />
-        </div>
-
-        <div className="relative w-full h-60 border border-dashed border-gray-400 flex items-center justify-center mb-4">
+        {/* Image Upload Section */}
+        <div className="relative w-full h-60 border border-dashed border-gray-500 flex items-center justify-center mb-6 shadow-lg rounded-lg">
           {previews.length === 0 ? (
-            <span className="text-gray-500">No images selected. Please choose files to upload.</span>
+            <span className="text-gray-400">
+              No images selected. Please choose files to upload.
+            </span>
           ) : (
             <>
               {previews.map((preview, index) => (
                 <div key={index} className="relative w-24 h-24 mx-2">
-                  <img src={preview} alt={`Preview ${index}`} className="object-cover w-full h-full" />
+                  <img
+                    src={preview}
+                    alt={`Preview ${index}`}
+                    className="object-cover w-full h-full rounded"
+                  />
                   <button
                     onClick={() => handleRemoveImage(index)}
                     className="absolute top-0 right-0 p-1 bg-red-500 rounded-full"
@@ -118,13 +119,15 @@ export default function UploadPrescription() {
           )}
         </div>
 
+        {/* Upload Button */}
         <button
           onClick={handleUploadClick}
-          className="mb-4 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+          className="mb-4 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-all"
         >
-          Upload File
+          Select Files
         </button>
 
+        {/* Hidden File Input */}
         <input
           type="file"
           accept="image/*"
@@ -134,9 +137,10 @@ export default function UploadPrescription() {
           multiple
         />
 
+        {/* Submit Button */}
         <button
           onClick={handleSubmit}
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+          className="w-full bg-white text-black py-3 rounded-lg hover:bg-purple-500 hover:text-white transition-all disabled:bg-gray-500 disabled:cursor-not-allowed"
           disabled={previews.length === 0 || !email || !familyMemberId} // Disable if no images or empty fields
         >
           Submit

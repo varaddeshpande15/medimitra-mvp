@@ -42,6 +42,24 @@
                         ]
                     }
                 ]
+            },
+            "sushant": {
+                "dob": "2024-10-06",
+                "meal_times": {
+                    "breakfast": "08:45",
+                    "lunch": "23:46",
+                    "dinner": "21:46"
+                },
+                "schedules": [
+                    {
+                        "medicine": "TAB_ DEMO MEDICINE 1",
+                        "dosage": "Moming Night",
+                        "times": [
+                            "08:45",
+                            "21:46"
+                        ]
+                    }
+                ]
             }
         }
     }

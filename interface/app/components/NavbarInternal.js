@@ -18,7 +18,7 @@ export default function NavbarInternal() {
       className="fixed w-screen h-[50px] bg-transparent text-white"
       style={{ zIndex: 20 }}
     >
-      <nav className="container mx-auto p-4 flex justify-end gap-x-40 items-center">
+      <nav className="container mx-auto p-4 flex justify-between gap-x-40 items-center">
         <div className="flex items-center space-x-4">
           <Link href="/" className="flex items-center space-x-2">
             <img
@@ -30,7 +30,7 @@ export default function NavbarInternal() {
           </Link>
         </div>
         <div className="flex space-x-4 items-center">
-          <div className="hidden gap-5 mr-5 lg:flex space-x-4 font-semibold">
+          {/* <div className="hidden gap-5 mr-5 lg:flex space-x-4 font-semibold">
             <Link
               id="animated-btn"
               href="/new-member"
@@ -66,7 +66,7 @@ export default function NavbarInternal() {
             >
               Help
             </Link>
-          </div>
+          </div> */}
           {!session ? (
             <div className="hidden lg:flex space-x-4">
               <Link
@@ -120,7 +120,7 @@ export default function NavbarInternal() {
         >
           <div className="lg:hidden xs:bg-[#1D1D1D] xs:w-4/5 rounded-xl xs:-translate-y-8 md:translate-y-0 flex flex-col space-y-4 p-4">
             <button onClick={toggleMenu}>Close</button>
-            <Link
+            {/* <Link
               id="animated-btn"
               href="#feature1"
               className="hover:text-purple-500 transition-colors duration-300"
@@ -147,7 +147,7 @@ export default function NavbarInternal() {
               className="hover:text-purple-500 transition-colors duration-300"
             >
               About
-            </Link>
+            </Link> */}
             {!session ? (
               <>
                 <Link

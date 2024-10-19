@@ -191,7 +191,7 @@ Your job is to extract the following details from the text and return them in JS
     "follow_up": "string"
 }}
 
-Ensure times are in 24-hour format (HH:MM). Provide the response only as JSON.
+Ensure times are in 24-hour format (HH:MM). Provide the response only as JSON. Feel free to correct OCR misreadings as you see fit - for example, the dosage might be read as \"Moming\"  instead of \"Morning\" so you can fix such issues at your liberty when adding info to the JSON.
 
 Meal Times: {meal_times_str}
 """

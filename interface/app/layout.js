@@ -8,8 +8,8 @@ import AuthProvider from "../utils/AuthProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "FinAdvise",
-  description: "Your AI-based financial advisor.",
+  title: "MediMitra",
+  description: "Your personalized healthcare companion.",
 };
 
 export default async function RootLayout({ children }) {

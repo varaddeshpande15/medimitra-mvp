@@ -1,7 +1,7 @@
 {
     "merchantkabeer68@gmail.com": {
         "family_members": {
-            "testing": {
+            "varad": {
                 "dob": "2024-10-14",
                 "meal_times": {
                     "breakfast": "06:08",
@@ -10,18 +10,18 @@
                 },
                 "schedules": [
                     {
-                        "medicine": "TAB_ DEMO MEDICINE 1",
-                        "dosage": "Moming Night",
+                        "medicine": "Crocin",
+                        "dosage": "1 pill",
                         "times": [
-                            "06:08",
+                            "14:47:10",
                             "21:08"
                         ]
                     },
                     {
-                        "medicine": "CAP: DBUO MEDICINE 2",
-                        "dosage": "Moming Night",
+                        "medicine": "Aspirin",
+                        "dosage": "1 pill",
                         "times": [
-                            "06:08",
+                            "14:43:10",
                             "21:08"
                         ]
                     },
@@ -30,7 +30,7 @@
                         "dosage": "Momino Night",
                         "times": [
                             "06:08",
-                            "21:08"
+                            "14:39:30"
                         ]
                     },
                     {
@@ -38,7 +38,7 @@
                         "dosage": "Maming; 1/2 Night",
                         "times": [
                             "06:08",
-                            "21:08"
+                            "14:39:40"
                         ]
                     },
                     {
@@ -68,11 +68,11 @@
                 },
                 "schedules": [
                     {
-                        "medicine": "TAB_ DEMO MEDICINE 1",
+                        "medicine": "Paracetamol",
                         "dosage": "Moming Night",
                         "times": [
                             "08:45",
-                            "21:46"
+                            "14:47:20"
                         ]
                     }
                 ]

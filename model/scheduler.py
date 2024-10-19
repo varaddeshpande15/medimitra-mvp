@@ -2,6 +2,7 @@ import os
 import schedule
 import time
 import json
+import playongooglehome
 
 # Path for saving the schedule
 SCHEDULE_FILE_PATH = 'schedule.json'
@@ -31,6 +32,7 @@ def save_data_to_file():
 # Update the reminder_alert function to use family member's name
 def reminder_alert(person_name, medicine, dosage):
     print(f"\nReminder for {person_name}: take {dosage} of {medicine}.")
+    playongooglehome.broadcast_message(f"Reminder for {person_name}: take {dosage} of {medicine}.")
 
 # Function to clear existing scheduled reminders
 def clear_existing_reminders():

@@ -78,105 +78,99 @@ export default function AddMember() {
   if (status === "authenticated") {
     return (
       <>
-        <div className="w-screen h-full relative">
-          <NavbarInternal />
+      <div className="w-screen h-full relative bg-[url('/blur-purple.svg')] bg-cover ">
+  <NavbarInternal />
 
-          {/* Main Section */}
-          <div
-            id="main"
-            className="w-full h-full bg-gradient-to-r from-[#0F081A] to-black"
-          >
-            <div className="flex justify-center items-center w-full h-full pt-24">
-              <div className="w-[80%] lg:w-[40%] bg-black border-1 border-white p-8 rounded-lg shadow-lg">
-                <h1 className="text-3xl font-bold text-center text-white mb-6">
-                  Add New Family Member
-                </h1>
+  {/* Main Section */}
+  <div id="main" className="w-full h-full bg-gradient-to-r from-[#0F081A] to-black">
+    <div className="flex justify-center items-center w-full h-full pt-24">
+      <div className="w-[90%] md:w-[70%] lg:w-[40%] bg-[#000000] border border-purple-800 p-8 rounded-lg shadow-xl">
+        <h1 className="text-4xl font-dm font-bold text-center text-white mb-5">
+          Add New Family Member
+        </h1>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div>
-                    <label className="block text-sm font-medium text-white">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      className="mt-1 text-black block w-full p-2 border border-gray-300 rounded-md shadow-sm"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                    />
-                  </div>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Name
+            </label>
+            <input
+              type="text"
+              className="block w-full p-3 bg-black text-white border border-purple-900 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 shadow-md"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-white">
-                      Date of Birth
-                    </label>
-                    <input
-                      type="date"
-                      className="mt-1 block text-black w-full p-2 border border-gray-300 rounded-md shadow-sm"
-                      value={dob}
-                      onChange={(e) => setDob(e.target.value)}
-                      required
-                    />
-                  </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Date of Birth
+            </label>
+            <input
+              type="date"
+              className="block w-full p-3 bg-black text-white border border-purple-900 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 shadow-md"
+              value={dob}
+              onChange={(e) => setDob(e.target.value)}
+              required
+            />
+          </div>
 
-                  <div className="flex space-x-4">
-                    <div className="flex-1">
-                      <label className="block text-sm font-medium text-white">
-                        Breakfast Time
-                      </label>
-                      <input
-                        type="time"
-                        className="mt-1 block w-full p-2 text-black border border-gray-300 rounded-md shadow-sm"
-                        value={breakfastTime}
-                        onChange={(e) => setBreakfastTime(e.target.value)}
-                        required
-                      />
-                    </div>
-                  </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Breakfast Time
+              </label>
+              <input
+                type="time"
+                className="block w-full p-3 bg-black text-white border border-purple-800 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 shadow-md"
+                value={breakfastTime}
+                onChange={(e) => setBreakfastTime(e.target.value)}
+                required
+              />
+            </div>
 
-                  <div className="flex space-x-4">
-                    <div className="flex-1">
-                      <label className="block text-sm font-medium text-white">
-                        Lunch Time
-                      </label>
-                      <input
-                        type="time"
-                        className="mt-1 block w-full text-black p-2 border border-gray-300 rounded-md shadow-sm"
-                        value={lunchTime}
-                        onChange={(e) => setLunchTime(e.target.value)}
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex space-x-4">
-                    <div className="flex-1">
-                      <label className="block text-sm font-medium text-white">
-                        Dinner Time
-                      </label>
-                      <input
-                        type="time"
-                        className="mt-1 block w-full text-black p-2 border border-gray-300 rounded-md shadow-sm"
-                        value={dinnerTime}
-                        onChange={(e) => setDinnerTime(e.target.value)}
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <button
-                      type="submit"
-                      className="w-full p-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-                    >
-                      Submit
-                    </button>
-                  </div>
-                </form>
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Lunch Time
+              </label>
+              <input
+                type="time"
+                className="block w-full p-3 bg-black text-white border border-purple-800 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 shadow-md"
+                value={lunchTime}
+                onChange={(e) => setLunchTime(e.target.value)}
+                required
+              />
             </div>
           </div>
-        </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Dinner Time
+            </label>
+            <input
+              type="time"
+              className="block w-full p-3 bg-black text-white border border-purple-800 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 shadow-md"
+              value={dinnerTime}
+              onChange={(e) => setDinnerTime(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              className="w-full p-3 bg-white text-black rounded-lg shadow-lg font-dm hover:bg-purple-500  hover:text-white transition-transform transform hover:scale-105"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
       </>
     );
   }

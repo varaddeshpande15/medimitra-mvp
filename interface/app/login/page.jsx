@@ -76,8 +76,8 @@ const Login = () => {
         <div className="flex flex-col md:flex-row">
           <div className="md:w-1/2 p-4 flex items-center justify-center">
             <div className="flex flex-col">
-            <img src="/pattern-img.svg" alt="Features" className="w-full h-auto" />
-            <img src="/pattern.svg" alt="Features" className="w-full h-auto" />
+            <img src="/logo.svg" alt="Features" className="w-full h-auto" />
+            
             </div>
           </div>
           <div className="md:w-1/2 p-4">

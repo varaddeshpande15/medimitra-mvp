@@ -9,6 +9,8 @@ from fastapi import FastAPI, UploadFile, File, Form
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from pymongo import MongoClient
+from bson import ObjectId
 
 app = FastAPI()
 
@@ -36,6 +38,12 @@ model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     generation_config=generation_config,
 )
+
+# MongoDB connection setup using pymongo
+client = MongoClient("mongodb+srv://existencefinadvise:Zv2xKKMYyvafc2ys@cluster0.llztjlx.mongodb.net/FinAdvise?retryWrites=true&w=majority&appName=Cluster0")  # Replace with your MongoDB URI
+db = client['FinAdvise']  # Replace with your database name
+family_members_collection = db['members']  # Replace with your collection name
+medicine_collection = db['medicines']  # Replace with your collection name
 
 # Path for saving the schedule
 SCHEDULE_FILE_PATH = 'schedule.json'
@@ -112,6 +120,35 @@ def add_or_update_schedule(user_name, family_name, medicine, dosage, times):
 
         save_data_to_file(data)
 
+# Function to add or update a family member's schedule in MongoDB
+def add_or_update_schedule_mongodb(family_member_id, medicine, dosage, times):
+    # Validate the medicine name
+    if not medicine:
+        raise ValueError("Medicine name cannot be empty.")
+
+    # Create the document
+    medicine_doc = {
+        "family_member_id": family_member_id,
+        "name": medicine,  # Ensure the 'name' field is included
+        "dosage": dosage,
+        "times": times
+    }
+
+    # Upsert document into MongoDB
+    result = medicine_collection.update_one(
+        {
+            "family_member_id": family_member_id,
+            "name": medicine  # Ensure we check against both family_member_id and name
+        },
+        {"$set": medicine_doc},
+        upsert=True
+    )
+    
+    if result.upserted_id:
+        print(f"Inserted new medicine schedule for family member {family_member_id}: {medicine}")
+    else:
+        print(f"Updated existing medicine schedule for family member {family_member_id}: {medicine}")
+
 
 # OCR + Gemini pipeline
 
@@ -171,8 +208,8 @@ def parse_with_gemini(extracted_text, default_prompt):
     response = chat_session.send_message(extracted_text)
     return response.text
 
-# Process parsed data and update schedule
-def process_parsed_info(parsed_info, user_name, family_name):
+# Process parsed info to update both MongoDB and schedule.json
+def process_parsed_info(parsed_info, user_name, family_member_id):
     try:
         parsed_json = json.loads(parsed_info)
 
@@ -184,8 +221,14 @@ def process_parsed_info(parsed_info, user_name, family_name):
             dosage = medicine.get("dosage")
             times = medicine.get("times", [])
 
+            family_member_name = find_family_member(family_member_id)
+
             if med_name and dosage and all(validate_time_format(time) for time in times):
-                add_or_update_schedule(user_name, family_name, med_name, dosage, times)
+                # Update JSON
+                add_or_update_schedule(user_name, family_member_name, med_name, dosage, times)
+                
+                # Update MongoDB
+                add_or_update_schedule_mongodb(family_member_id, med_name, dosage, times)
             else:
                 print(f"Invalid data for medicine: {med_name}, skipping this entry.")
     except json.JSONDecodeError:
@@ -199,7 +242,10 @@ def validate_time_format(time_str):
     except ValueError:
         return False
 
-
+# Find a family member given the family member object id as a parameter
+def find_family_member(family_member_id):
+    family_member = family_members_collection.find_one({"_id": ObjectId(family_member_id)})
+    return family_member.get('name')
 # FastAPI routes
 
 # 1. Add a new user
@@ -249,41 +295,41 @@ async def delete_user(user_name: str):
     remove_user(user_name)
     return {"message": f"User {user_name} removed successfully."}
 
-# Endpoint to upload a prescription and process it with OCR + Gemini
 @app.post("/ocr/")
 async def upload_image(
     user_name: str = Form(...),                
-    family_name: str = Form(...), 
+    family_member_id: str = Form(...), 
     file: UploadFile = File(...),
 ):
-    try:
-        # Save the uploaded file locally
-        contents = await file.read()
-        file_location = "uploaded_image.png"
-        with open(file_location, "wb") as temp_file:
-            temp_file.write(contents)
 
-        # Step 1: Extract text from the image
-        extracted_text = extract_text_from_image(file_location)
-        print(f"\nExtracted Text:\n{extracted_text}")
+    # Save the uploaded file locally
+    contents = await file.read()
+    file_location = "uploaded_image.png"
+    with open(file_location, "wb") as temp_file:
+        temp_file.write(contents)
 
-        # Step 2: Create the prompt for Gemini
-        default_prompt = create_default_prompt(user_name, family_name)
+    family_member_name = find_family_member(family_member_id)
 
-        # Step 3: Parse the extracted text using Gemini
-        parsed_info = parse_with_gemini(extracted_text, default_prompt)
-        print(f"\nParsed Prescription Information:\n{parsed_info}")
+    # Step 2: Extract text from the image
+    extracted_text = extract_text_from_image(file_location)
+    print(f"\nExtracted Text:\n{extracted_text}")
 
-        # Step 4: Process the parsed info and update the family member's schedule
-        process_parsed_info(parsed_info, user_name, family_name)
 
-        # Remove the saved file after processing
-        os.remove(file_location)
+    # Step 3: Create the prompt for Gemini
+    default_prompt = create_default_prompt(user_name, family_member_name)
 
-        return {"message": f"Prescription processed successfully for {family_name}."}
+    print (default_prompt)
 
-    except Exception as e:
-        return {"error": str(e)}
+    # Step 4: Parse the extracted text using Gemini
+    parsed_info = parse_with_gemini(extracted_text, default_prompt)
+    print(f"\nParsed Prescription Information:\n{parsed_info}")
+
+    # Step 5: Process the parsed info and update the family member's schedule
+    process_parsed_info(parsed_info, user_name, family_member_id)
+
+    return {"message": "Prescription processed and data saved successfully."}
+
+
 
 
 # Load existing data at startup

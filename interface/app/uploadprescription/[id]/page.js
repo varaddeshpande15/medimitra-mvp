@@ -1,13 +1,28 @@
-"use client"
-import React, { useState } from 'react';
+"use client";
+
+import React, { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useParams, useRouter } from 'next/navigation'; // Updated to handle router for family ID param
 import { FaTimes } from 'react-icons/fa';
 
-function UploadPrescription() {
+export default function UploadPrescription() {
   const [images, setImages] = useState([]);
   const [previews, setPreviews] = useState([]);
-  const [userName, setUserName] = useState(''); // State for username
-  const [familyMember, setFamilyMember] = useState(''); // State for family member
+  const { data: session, status } = useSession(); // Use session hook to get user email
+  const [email, setEmail] = useState('');
+  const [familyMemberId, setFamilyMemberId] = useState(''); // Family member ID from param
   const fileInputRef = React.useRef(null);
+  const router = useRouter();
+  const { id } = useParams(); // Grab family member ID from the URL
+
+  useEffect(() => {
+    if (session) {
+      setEmail(session.user.email); // Automatically set the logged-in user's email
+    }
+    if (id) {
+      setFamilyMemberId(id); // Set the family member ID from the URL
+    }
+  }, [session, id]);
 
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files);
@@ -27,8 +42,8 @@ function UploadPrescription() {
 
   const handleSubmit = async () => {
     const formData = new FormData();
-    formData.append('user_name', userName);
-    formData.append('family_name', familyMember);
+    formData.append('user_name', email); // Pass the user's email automatically
+    formData.append('family_member_id', familyMemberId); // Pass the family member ID from the param
     images.forEach(image => {
       formData.append('file', image);
     });
@@ -46,26 +61,41 @@ function UploadPrescription() {
     }
   };
 
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
+
+  if (status === 'unauthenticated') {
+    router.push('/login'); // Redirect if not authenticated
+    return null;
+  }
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-black">
       <div className="w-1/2 p-5 border border-gray-300 rounded shadow-lg bg-white flex flex-col items-center">
         <h2 className="text-lg font-semibold mb-4 text-black text-center">Choose your files</h2>
 
-        {/* Input fields for username and family member name */}
-        <input
-          type="text"
-          placeholder="Username"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          className="border border-gray-300 p-2 mb-4 w-full text-black"
-        />
-        <input
-          type="text"
-          placeholder="Family Member Name"
-          value={familyMember}
-          onChange={(e) => setFamilyMember(e.target.value)}
-          className="border border-gray-300 p-2 mb-4 w-full text-black"
-        />
+        {/* Display email automatically */}
+        <div className="mb-4 w-full">
+          <label className="block text-black">User Email: </label>
+          <input
+            type="text"
+            value={email}
+            disabled
+            className="border border-gray-300 p-2 w-full text-black"
+          />
+        </div>
+
+        {/* Display family member ID automatically */}
+        <div className="mb-4 w-full">
+          <label className="block text-black">Family Member ID: </label>
+          <input
+            type="text"
+            value={familyMemberId}
+            disabled
+            className="border border-gray-300 p-2 w-full text-black"
+          />
+        </div>
 
         <div className="relative w-full h-60 border border-dashed border-gray-400 flex items-center justify-center mb-4">
           {previews.length === 0 ? (
@@ -107,7 +137,7 @@ function UploadPrescription() {
         <button
           onClick={handleSubmit}
           className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-          disabled={previews.length === 0 || !userName || !familyMember} // Disable if no images or empty fields
+          disabled={previews.length === 0 || !email || !familyMemberId} // Disable if no images or empty fields
         >
           Submit
         </button>
@@ -115,5 +145,3 @@ function UploadPrescription() {
     </div>
   );
 }
-
-export default UploadPrescription;

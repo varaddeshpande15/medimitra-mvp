@@ -55,41 +55,6 @@ export async function POST(req) {
             headers: { 'Content-Type': 'application/json' },
         });
     }
-
-    const newMember = new Member({
-      name,
-      dob,
-      Breakfast,
-      Lunch,
-      Dinner,
-      user: user._id,
-    });
-
-    // Ensure the user has a members array
-    user.members.push(newMember._id);
-    await user.save();
-
-    await newMember.save();
-
-    console.log("New member added:", newMember);
-
-    return new Response(JSON.stringify(newMember), {
-      status: 201,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (error) {
-    console.error("Error adding member:", error);
-    return new Response(
-      JSON.stringify({
-        message: "Error adding member.",
-        error: error.message,
-      }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-  }
 }
 
 // Add the GET method
